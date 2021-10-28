@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            body {background - color: #ffffff;margin: 0;overflow: hidden;}
+        </style>
+    </head>
+    <body>
+        <!--- https://ajax.googleapis.com/ajax/libs/threejs/r76/three.min.js -->
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/95/three.min.js"></script>
+
+        <script>
+            var camera, scene, renderer;
+            var geometria, material, mesh;
+            var clock;
+
+            function cubo(x, y, z, px, py, pz, material, color, wf) {
+                geometria = new THREE.CubeGeometry(x, y, z);
+                switch (material) {
+                    case "Basic":
+                        material = new THREE.MeshBasicMaterial({ color: color, wireframe: wf });
+                        break;
+                    case "Standard":
+                        material = new THREE.MeshStandardMaterial({ color: color, wireframe: wf });
+                        break;
+                    case "Physical":
+                        material = new THREE.MesPhysicalMaterial({ color: color, wireframe: wf });
+                        break;
+                    case "Phong":
+                        material = new THREE.MeshPhongMaterial({ color: color, wireframe: wf });
+                        break;
+                    case "Lambert":
+                        material = new THREE.MeshLambertMaterial({ color: color, wireframe: wf });
+                        break;
+                }
+                cube = new THREE.Mesh(geometria, material);
+                scene.add(cube);
+                cube.position.set(px, py, pz);
+
+                return cube;
+            }
+
+            function init() {
+                renderer = new THREE.WebGLRenderer();
+                renderer.setSize(window.innerWidth * 0.99, window.innerHeight * 0.99);
+                document.body.appendChild(renderer.domElement);
+                scene = new THREE.Scene();
+                var arrCube = [];
+
+                var t = 1; //variable de la longitud del cubo
+                var nC = 3; //numero de cubos
+                var ang = Math.PI / 4;
+
+                for (var i = 0; i < nC; i++) {
+                    //este for crea los cubos del mimo tamaño y misma posicion
+
+                    arrCube.push(cubo(t, t, t, 0, 0, 0, "Basic", i == 0 ? "red" : i == 1 ? "green" : "blue", false));
+                }
+
+                //aqui escalamos los cubos y cada cubo de tiene de longitud la mitad del anterior
+                arrCube[1].geometry.scale(t / 2, t / 2, t / 2);
+                arrCube[2].geometry.scale(t / 4, t / 4, t / 4);
+
+                //aqui se traslada cada cubo uno encima del otro ademas que sus lados quedan en 1
+                arrCube[0].geometry.translate(0.5,0.5,0.5);
+                arrCube[1].geometry.translate(0, t+t/4, 0.7);
+                arrCube[2].geometry.translate(0.5, t+t-t/3, 0.5);
+
+                //aqui se rota el cubo de en medio en 45 grados
+                arrCube[1].geometry.rotateY(ang);
+
+                const axesHelper = new THREE.AxesHelper(10);
+                scene.add(axesHelper);
+
+                camera = new THREE.PerspectiveCamera(2, window.innerWidth / window.innerHeight, 0.1, 100);
+                camera.position.set(t/8, 90, 6);
+                camera.lookAt(arrCube[2].position);
+            }
+            
+            
+          
+            init();
+            renderer.render(scene, camera);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            body {background - color: #ffffff;margin: 0;overflow: hidden;}
+        </style>
+    </head>
+    <body>
+        <!--- https://ajax.googleapis.com/ajax/libs/threejs/r76/three.min.js -->
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/95/three.min.js"></script>
+
+        <script>
+            var camera, scene, renderer;
+            var geometria, material, mesh;
+
+            
+            function init() {
+                renderer = new THREE.WebGLRenderer();
+                renderer.setSize(window.innerWidth * 0.99, window.innerHeight * 0.99);
+                document.body.appendChild(renderer.domElement);
+                scene = new THREE.Scene();
+   
+                const geometry = new THREE.ConeGeometry( 1, 1, 10 );
+                const material = new THREE.MeshBasicMaterial( {color: 0xffff00,wireframe: true} );
+                const cone = new THREE.Mesh( geometry, material );
+                scene.add( cone );
+
+                cone.geometry.rotateY(0.628319/2)
+                cone.geometry.rotateZ(-Math.PI/2)
+                cone.geometry.rotateX(1)
+                cone.position.set(1/2,0,0)
+
+                const axesHelper = new THREE.AxesHelper(10);
+                scene.add(axesHelper);
+
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+                camera.position.set(2, 1, 1);
+                camera.lookAt(axesHelper.position);
+            }
+            
+       
+
+          
+            init();
+            renderer.render(scene, camera);
+        </script>
+    </body>
+</html>
